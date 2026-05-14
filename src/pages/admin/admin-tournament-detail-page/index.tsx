@@ -1,5 +1,6 @@
 import { JSX } from 'react'
 import dayjs from 'dayjs'
+import { useTranslation } from 'react-i18next'
 import StatusBadge from 'src/components/status-badge'
 import { IoArrowBack, IoPencilOutline, IoTrashOutline } from 'react-icons/io5'
 import { useAdminTournamentDetailPage } from './use-admin-tournament-detail-page'
@@ -21,11 +22,12 @@ const AdminTournamentDetailPage = (): JSX.Element => {
     handleChangeStatus,
     handleDelete,
   } = useAdminTournamentDetailPage()
+  const { t } = useTranslation()
 
   if (isLoading) {
     return (
       <div className="flex h-full items-center justify-center">
-        <span className="text-[#555] text-sm">Loading…</span>
+        <span className="text-[#555] text-sm">{t('common.loading')}</span>
       </div>
     )
   }
@@ -33,7 +35,7 @@ const AdminTournamentDetailPage = (): JSX.Element => {
   if (isError || !tournament) {
     return (
       <div className="flex h-full items-center justify-center">
-        <span className="text-red-400 text-sm">Tournament not found</span>
+        <span className="text-red-400 text-sm">{t('admin.tournamentDetail.tournamentNotFound')}</span>
       </div>
     )
   }
@@ -47,7 +49,7 @@ const AdminTournamentDetailPage = (): JSX.Element => {
             className="flex items-center gap-1.5 text-[#555] hover:text-white text-sm mb-4 transition-colors cursor-pointer"
           >
             <IoArrowBack size={16} />
-            All Tournaments
+            {t('admin.tournamentDetail.allTournaments')}
           </button>
 
           <div className="flex items-start justify-between gap-4">
@@ -63,7 +65,7 @@ const AdminTournamentDetailPage = (): JSX.Element => {
                 className="flex items-center gap-1.5 text-xs text-[#888] border border-[#2a2a2a] px-3 py-1.5 rounded-lg hover:text-red-400 hover:border-red-400 transition-colors cursor-pointer"
               >
                 <IoTrashOutline size={14} />
-                Delete
+                {t('common.delete')}
               </button>
 
               <button
@@ -71,7 +73,7 @@ const AdminTournamentDetailPage = (): JSX.Element => {
                 className="flex items-center gap-1.5 text-xs text-[#888] border border-[#2a2a2a] px-3 py-1.5 rounded-lg hover:text-white hover:border-[#444] transition-colors cursor-pointer"
               >
                 <IoPencilOutline size={14} />
-                Edit
+                {t('common.edit')}
               </button>
 
               {nextStatus && buttonLabel && (
@@ -90,7 +92,7 @@ const AdminTournamentDetailPage = (): JSX.Element => {
           {tournament.description && (
             <div>
               <span className="text-xs text-[#555] uppercase tracking-wider">
-                Description
+                {t('admin.tournamentDetail.description')}
               </span>
               <p className="text-[#ccc] text-sm mt-1 whitespace-pre-wrap">
                 {tournament.description}
@@ -101,7 +103,7 @@ const AdminTournamentDetailPage = (): JSX.Element => {
           {tournament.rules && (
             <div>
               <span className="text-xs text-[#555] uppercase tracking-wider">
-                Rules
+                {t('admin.tournamentDetail.rules')}
               </span>
               <p className="text-[#ccc] text-sm mt-1 whitespace-pre-wrap">
                 {tournament.rules}
@@ -111,21 +113,21 @@ const AdminTournamentDetailPage = (): JSX.Element => {
 
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-2 border-t border-[#1d1d1d]">
             <div>
-              <span className="text-xs text-[#555]">Registration</span>
+              <span className="text-xs text-[#555]">{t('admin.tournamentDetail.registration')}</span>
               <p className="text-[#aaa] text-sm mt-0.5">
                 {dayjs(tournament.registrationStartDate).format('DD MMM')} –{' '}
                 {dayjs(tournament.registrationEndDate).format('DD MMM YYYY')}
               </p>
             </div>
             <div>
-              <span className="text-xs text-[#555]">Start date</span>
+              <span className="text-xs text-[#555]">{t('admin.tournamentDetail.startDate')}</span>
               <p className="text-[#aaa] text-sm mt-0.5">
                 {dayjs(tournament.startDate).format('DD MMM YYYY')}
               </p>
             </div>
             {tournament.maxTeamCapacity != null && (
               <div>
-                <span className="text-xs text-[#555]">Max teams</span>
+                <span className="text-xs text-[#555]">{t('admin.tournamentDetail.maxTeams')}</span>
                 <p className="text-[#aaa] text-sm mt-0.5">
                   {tournament.maxTeamCapacity}
                 </p>
@@ -137,7 +139,7 @@ const AdminTournamentDetailPage = (): JSX.Element => {
         <div>
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-white font-medium">
-              Rounds{' '}
+              {t('tournaments.rounds')}{' '}
               <span className="text-[#555] font-normal text-sm">
                 ({rounds.length})
               </span>
@@ -146,12 +148,12 @@ const AdminTournamentDetailPage = (): JSX.Element => {
               onClick={handleAddRound}
               className="text-xs bg-white text-black font-medium px-3 py-1.5 rounded-lg hover:bg-[#e0e0e0] transition-colors cursor-pointer"
             >
-              + Add Round
+              {t('admin.tournamentDetail.addRound')}
             </button>
           </div>
 
           {rounds.length === 0 ? (
-            <p className="text-[#555] text-sm">No rounds yet.</p>
+            <p className="text-[#555] text-sm">{t('admin.tournamentDetail.noRoundsYet')}</p>
           ) : (
             <div className="flex flex-col gap-2">
               {rounds.map(r => (
@@ -163,7 +165,7 @@ const AdminTournamentDetailPage = (): JSX.Element => {
                   <div>
                     <span className="text-white text-sm">{r.name}</span>
                     <p className="text-[#555] text-xs mt-0.5">
-                      Deadline:{' '}
+                      {t('admin.tournamentDetail.deadline')}{' '}
                       {dayjs(r.submissionDeadline).format('DD MMM YYYY, HH:mm')}
                     </p>
                   </div>
@@ -176,25 +178,25 @@ const AdminTournamentDetailPage = (): JSX.Element => {
 
         <div>
           <h2 className="text-white font-medium mb-3">
-            Teams{' '}
+            {t('team.teams')}{' '}
             <span className="text-[#555] font-normal text-sm">({teams.length})</span>
           </h2>
 
           {teams.length === 0 ? (
-            <p className="text-[#555] text-sm">No teams registered.</p>
+            <p className="text-[#555] text-sm">{t('admin.tournamentDetail.noTeamsRegistered')}</p>
           ) : (
             <div className="flex flex-col gap-2">
-              {teams.map(t => (
+              {teams.map(tm => (
                 <div
-                  key={t.id}
-                  onClick={() => handleNavigateToTeam(t.id)}
+                  key={tm.id}
+                  onClick={() => handleNavigateToTeam(tm.id)}
                   className="bg-[#181818] border border-[#1d1d1d] rounded-xl px-4 py-3 flex items-center justify-between cursor-pointer hover:border-[#2a2a2a] transition-colors"
                 >
                   <div>
-                    <span className="text-white text-sm">{t.name}</span>
-                    {(t.city || t.school) && (
+                    <span className="text-white text-sm">{tm.name}</span>
+                    {(tm.city || tm.school) && (
                       <p className="text-[#555] text-xs mt-0.5">
-                        {[t.city, t.school].filter(Boolean).join(' · ')}
+                        {[tm.city, tm.school].filter(Boolean).join(' · ')}
                       </p>
                     )}
                   </div>

@@ -1,10 +1,12 @@
 import { JSX } from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { RoutesEnum } from 'src/routes/routes'
 import { useLoginPage } from './use-login-page'
 
 const LoginPage = (): JSX.Element => {
   const { register, handleSubmit, errors, isSubmitting, onSubmit } = useLoginPage()
+  const { t } = useTranslation()
 
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-[#0f0f0f]">
@@ -12,10 +14,10 @@ const LoginPage = (): JSX.Element => {
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-4 w-full max-w-sm bg-[#181818] p-8 rounded-2xl border border-[#1d1d1d]"
       >
-        <h1 className="text-white text-xl font-semibold mb-2">Sign in</h1>
+        <h1 className="text-white text-xl font-semibold mb-2">{t('auth.signIn')}</h1>
 
         <div className="flex flex-col gap-1">
-          <label className="text-xs text-[#888]">Email</label>
+          <label className="text-xs text-[#888]">{t('auth.email')}</label>
           <input
             {...register('email')}
             type="email"
@@ -28,7 +30,7 @@ const LoginPage = (): JSX.Element => {
         </div>
 
         <div className="flex flex-col gap-1">
-          <label className="text-xs text-[#888]">Password</label>
+          <label className="text-xs text-[#888]">{t('auth.password')}</label>
           <input
             {...register('password')}
             type="password"
@@ -45,13 +47,13 @@ const LoginPage = (): JSX.Element => {
           disabled={isSubmitting}
           className="mt-2 bg-white text-black text-sm font-medium py-2 rounded-lg hover:bg-[#e0e0e0] transition-colors disabled:opacity-50 cursor-pointer"
         >
-          {isSubmitting ? 'Signing in…' : 'Sign in'}
+          {isSubmitting ? t('auth.signingIn') : t('auth.signIn')}
         </button>
 
         <p className="text-center text-xs text-[#666]">
-          No account?{' '}
+          {t('auth.noAccount')}{' '}
           <Link to={RoutesEnum.AUTH_REGISTER} className="text-white hover:underline">
-            Register
+            {t('auth.register')}
           </Link>
         </p>
       </form>

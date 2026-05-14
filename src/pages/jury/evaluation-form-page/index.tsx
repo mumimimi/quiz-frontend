@@ -1,16 +1,8 @@
 import { JSX } from 'react'
 import { IoArrowBack, IoLinkOutline } from 'react-icons/io5'
+import { useTranslation } from 'react-i18next'
 import { useEvaluationFormPage } from './use-evaluation-form-page'
 import type { ScoreKey } from './types'
-
-const SCORE_FIELDS: { key: ScoreKey; label: string }[] = [
-  { key: 'backendQuality', label: 'Backend Quality' },
-  { key: 'databaseStructure', label: 'Database Structure' },
-  { key: 'frontendQuality', label: 'Frontend Quality' },
-  { key: 'requirementsCompletion', label: 'Requirements Completion' },
-  { key: 'functionality', label: 'Functionality' },
-  { key: 'usability', label: 'Usability' },
-]
 
 const EvaluationFormPage = (): JSX.Element => {
   const {
@@ -28,11 +20,21 @@ const EvaluationFormPage = (): JSX.Element => {
     handleNumberInput,
     updateScore,
   } = useEvaluationFormPage()
+  const { t } = useTranslation()
+
+  const SCORE_FIELDS: { key: ScoreKey; label: string }[] = [
+    { key: 'backendQuality', label: t('jury.backendQuality') },
+    { key: 'databaseStructure', label: t('jury.databaseStructure') },
+    { key: 'frontendQuality', label: t('jury.frontendQuality') },
+    { key: 'requirementsCompletion', label: t('jury.requirementsCompletion') },
+    { key: 'functionality', label: t('jury.functionality') },
+    { key: 'usability', label: t('jury.usability') },
+  ]
 
   if (!stateAssignment && isLoadingContext) {
     return (
       <div className="flex h-full items-center justify-center">
-        <span className="text-[#555] text-sm">Loading…</span>
+        <span className="text-[#555] text-sm">{t('common.loading')}</span>
       </div>
     )
   }
@@ -45,11 +47,11 @@ const EvaluationFormPage = (): JSX.Element => {
           className="flex items-center gap-1.5 text-[#555] hover:text-white text-sm mb-6 transition-colors cursor-pointer"
         >
           <IoArrowBack size={16} />
-          Back
+          {t('common.back')}
         </button>
 
         <div className="flex flex-col gap-1 mb-6">
-          <h1 className="text-white text-2xl font-semibold">Evaluate Submission</h1>
+          <h1 className="text-white text-2xl font-semibold">{t('jury.evaluationTitle')}</h1>
           {assignment && (
             <p className="text-[#555] text-sm">{assignment.submission.team.name}</p>
           )}
@@ -58,8 +60,8 @@ const EvaluationFormPage = (): JSX.Element => {
         {assignment && (
           <div className="bg-[#181818] border border-[#1d1d1d] rounded-2xl p-4 flex flex-col gap-2 mb-4">
             {[
-              { label: 'GitHub', url: assignment.submission.githubUrl },
-              { label: 'Video', url: assignment.submission.videoDemoUrl },
+              { label: t('jury.github'), url: assignment.submission.githubUrl },
+              { label: t('jury.video'), url: assignment.submission.videoDemoUrl },
             ].map(({ label, url }) => (
               <div key={label} className="flex items-center gap-2">
                 <span className="text-xs text-[#555] w-12 shrink-0">{label}</span>
@@ -79,7 +81,7 @@ const EvaluationFormPage = (): JSX.Element => {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="bg-[#181818] border border-[#1d1d1d] rounded-2xl p-5 flex flex-col gap-5">
-            <h2 className="text-white text-sm font-medium">Scores (0 – 100)</h2>
+            <h2 className="text-white text-sm font-medium">{t('jury.scoresSection')}</h2>
 
             {SCORE_FIELDS.map(({ key, label }) => (
               <div key={key} className="flex flex-col gap-2">
@@ -92,7 +94,7 @@ const EvaluationFormPage = (): JSX.Element => {
                     value={scores[key]}
                     onChange={e => handleNumberInput(key, e)}
                     onBlur={e => updateScore(key, Number(e.target.value))}
-                    className="w-16 bg-[#0f0f0f] border border-[#2a2a2a] rounded-md px-2 py-1 text-sm text-white text-center outline-none focus:border-[#444] [color-scheme:dark]"
+                    className="w-16 bg-[#0f0f0f] border border-[#2a2a2a] rounded-md px-2 py-1 text-sm text-white text-center outline-none focus:border-[#444] scheme-dark"
                   />
                 </div>
                 <input
@@ -111,7 +113,7 @@ const EvaluationFormPage = (): JSX.Element => {
           </div>
 
           <div className="bg-[#181818] border border-[#1d1d1d] rounded-2xl p-5 flex items-center justify-between">
-            <span className="text-[#888] text-sm">Total score (average)</span>
+            <span className="text-[#888] text-sm">{t('jury.totalScore')}</span>
             <span
               className={`text-2xl font-bold ${
                 totalScore > 70
@@ -126,12 +128,12 @@ const EvaluationFormPage = (): JSX.Element => {
           </div>
 
           <div className="bg-[#181818] border border-[#1d1d1d] rounded-2xl p-5 flex flex-col gap-2">
-            <label className="text-xs text-[#888]">Comment (optional)</label>
+            <label className="text-xs text-[#888]">{t('jury.commentLabel')}</label>
             <textarea
               value={comment}
               onChange={e => setComment(e.target.value)}
               rows={4}
-              placeholder="General feedback on the submission…"
+              placeholder={t('jury.commentPlaceholder')}
               className="bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-[#444] placeholder:text-[#555] w-full resize-none"
             />
           </div>
@@ -143,11 +145,11 @@ const EvaluationFormPage = (): JSX.Element => {
           >
             {isSubmitting
               ? isEditMode
-                ? 'Updating…'
-                : 'Submitting…'
+                ? t('jury.updating')
+                : t('jury.submitting')
               : isEditMode
-                ? 'Update Evaluation'
-                : 'Submit Evaluation'}
+                ? t('jury.updateEvaluation')
+                : t('jury.submitEvaluation')}
           </button>
         </form>
       </div>

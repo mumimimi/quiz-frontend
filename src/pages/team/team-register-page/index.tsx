@@ -1,4 +1,5 @@
 import { JSX } from 'react'
+import { useTranslation } from 'react-i18next'
 import { TournamentStatusEnum } from 'src/enums'
 import { IoArrowBack, IoAddOutline, IoTrashOutline } from 'react-icons/io5'
 import { useTeamRegisterPage } from './use-team-register-page'
@@ -21,11 +22,12 @@ const TeamRegisterPage = (): JSX.Element => {
     handleBack,
     onSubmit,
   } = useTeamRegisterPage()
+  const { t } = useTranslation()
 
   if (isLoading) {
     return (
       <div className="flex h-full items-center justify-center">
-        <span className="text-[#555] text-sm">Loading…</span>
+        <span className="text-[#555] text-sm">{t('common.loading')}</span>
       </div>
     )
   }
@@ -33,12 +35,12 @@ const TeamRegisterPage = (): JSX.Element => {
   if (isError) {
     return (
       <div className="flex h-full items-center justify-center flex-col gap-3">
-        <span className="text-red-400 text-sm">Failed to load tournament.</span>
+        <span className="text-red-400 text-sm">{t('team.failedToLoadTournament')}</span>
         <button
           onClick={handleBack}
           className="text-xs text-[#555] hover:text-white transition-colors cursor-pointer"
         >
-          Back to tournament
+          {t('team.backToTournament')}
         </button>
       </div>
     )
@@ -47,12 +49,12 @@ const TeamRegisterPage = (): JSX.Element => {
   if (tournament?.status !== TournamentStatusEnum.REGISTRATION) {
     return (
       <div className="flex h-full items-center justify-center flex-col gap-3">
-        <span className="text-red-400 text-sm">Team registration is closed for this tournament.</span>
+        <span className="text-red-400 text-sm">{t('team.registrationClosed')}</span>
         <button
           onClick={handleBack}
           className="text-xs text-[#555] hover:text-white transition-colors cursor-pointer"
         >
-          Back to tournament
+          {t('team.backToTournament')}
         </button>
       </div>
     )
@@ -69,36 +71,36 @@ const TeamRegisterPage = (): JSX.Element => {
           {tournament.name}
         </button>
 
-        <h1 className="text-white text-2xl font-semibold mb-6">Register Team</h1>
+        <h1 className="text-white text-2xl font-semibold mb-6">{t('team.registerTitle')}</h1>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
           <div className="bg-[#181818] border border-[#1d1d1d] rounded-2xl p-5 flex flex-col gap-4">
-            <h2 className="text-white text-sm font-medium">Team info</h2>
+            <h2 className="text-white text-sm font-medium">{t('team.teamInfo')}</h2>
 
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-[#888]">Team name *</label>
+              <label className="text-xs text-[#888]">{t('team.teamName')}</label>
               <input {...register('name')} placeholder="Team Rocket" className={inputCls} />
               {errors.name && <span className="text-xs text-red-400">{errors.name.message}</span>}
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div className="flex flex-col gap-1">
-                <label className="text-xs text-[#888]">City</label>
+                <label className="text-xs text-[#888]">{t('team.city')}</label>
                 <input {...register('city')} placeholder="Kyiv" className={inputCls} />
               </div>
               <div className="flex flex-col gap-1">
-                <label className="text-xs text-[#888]">School</label>
+                <label className="text-xs text-[#888]">{t('team.school')}</label>
                 <input {...register('school')} placeholder="School №1" className={inputCls} />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div className="flex flex-col gap-1">
-                <label className="text-xs text-[#888]">Telegram</label>
+                <label className="text-xs text-[#888]">{t('team.telegram')}</label>
                 <input {...register('telegramHandle')} placeholder="@handle" className={inputCls} />
               </div>
               <div className="flex flex-col gap-1">
-                <label className="text-xs text-[#888]">Discord</label>
+                <label className="text-xs text-[#888]">{t('team.discord')}</label>
                 <input
                   {...register('discordHandle')}
                   placeholder="username#0000"
@@ -111,7 +113,7 @@ const TeamRegisterPage = (): JSX.Element => {
           <div className="bg-[#181818] border border-[#1d1d1d] rounded-2xl p-5 flex flex-col gap-4">
             <div className="flex items-center justify-between">
               <h2 className="text-white text-sm font-medium">
-                Members{' '}
+                {t('team.members')}{' '}
                 <span className="text-[#555] font-normal">({fields.length})</span>
               </h2>
               <button
@@ -120,7 +122,7 @@ const TeamRegisterPage = (): JSX.Element => {
                 className="flex items-center gap-1 text-xs text-[#888] hover:text-white transition-colors cursor-pointer"
               >
                 <IoAddOutline size={16} />
-                Add member
+                {t('team.addMember')}
               </button>
             </div>
 
@@ -135,7 +137,7 @@ const TeamRegisterPage = (): JSX.Element => {
                   className="border border-[#2a2a2a] rounded-xl p-3 flex flex-col gap-2"
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs text-[#555]">Member {idx + 1}</span>
+                    <span className="text-xs text-[#555]">{t('team.member', { number: idx + 1 })}</span>
                     {fields.length > 2 && (
                       <button
                         type="button"
@@ -149,7 +151,7 @@ const TeamRegisterPage = (): JSX.Element => {
 
                   <div className="grid grid-cols-2 gap-2">
                     <div className="flex flex-col gap-1">
-                      <label className="text-xs text-[#888]">First name *</label>
+                      <label className="text-xs text-[#888]">{t('team.firstName')}</label>
                       <input
                         {...register(`members.${idx}.firstName`)}
                         placeholder="John"
@@ -162,7 +164,7 @@ const TeamRegisterPage = (): JSX.Element => {
                       )}
                     </div>
                     <div className="flex flex-col gap-1">
-                      <label className="text-xs text-[#888]">Last name *</label>
+                      <label className="text-xs text-[#888]">{t('team.lastName')}</label>
                       <input
                         {...register(`members.${idx}.lastName`)}
                         placeholder="Doe"
@@ -177,7 +179,7 @@ const TeamRegisterPage = (): JSX.Element => {
                   </div>
 
                   <div className="flex flex-col gap-1">
-                    <label className="text-xs text-[#888]">Email *</label>
+                    <label className="text-xs text-[#888]">{t('team.emailLabel')}</label>
                     <input
                       {...register(`members.${idx}.email`)}
                       type="email"
@@ -200,7 +202,7 @@ const TeamRegisterPage = (): JSX.Element => {
             disabled={isSubmitting}
             className="bg-white text-black text-sm font-medium py-2.5 rounded-lg hover:bg-[#e0e0e0] transition-colors disabled:opacity-50 cursor-pointer"
           >
-            {isSubmitting ? 'Registering…' : 'Register Team'}
+            {isSubmitting ? t('team.registering') : t('team.registerButton')}
           </button>
         </form>
       </div>

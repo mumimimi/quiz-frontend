@@ -29,6 +29,9 @@ export default () => {
         src: "/src",
       },
     },
+    optimizeDeps: {
+      include: ['dayjs/locale/uk'],
+    },
   });
 };
 

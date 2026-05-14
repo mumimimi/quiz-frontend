@@ -1,4 +1,5 @@
 import { JSX } from 'react'
+import { useTranslation } from 'react-i18next'
 import { RoundStatusEnum, TournamentStatusEnum } from 'src/enums'
 import { cn } from 'src/utils/cn'
 import type { StatusBadgeProps } from './types'
@@ -21,26 +22,28 @@ const getStatusStyle = (status: TournamentStatusEnum | RoundStatusEnum): string 
   }
 }
 
-const getStatusLabel = (status: TournamentStatusEnum | RoundStatusEnum): string => {
+const getStatusKey = (status: TournamentStatusEnum | RoundStatusEnum): string => {
   switch (status) {
     case TournamentStatusEnum.REGISTRATION:
-      return 'Registration'
+      return 'status.registration'
     case TournamentStatusEnum.RUNNING:
-      return 'Running'
+      return 'status.running'
     case TournamentStatusEnum.FINISHED:
-      return 'Finished'
+      return 'status.finished'
     case RoundStatusEnum.ACTIVE:
-      return 'Active'
+      return 'status.active'
     case RoundStatusEnum.SUBMISSION_CLOSED:
-      return 'Submissions Closed'
+      return 'status.submission_closed'
     case RoundStatusEnum.EVALUATED:
-      return 'Evaluated'
+      return 'status.evaluated'
     default:
-      return 'Draft'
+      return 'status.draft'
   }
 }
 
 const StatusBadge = ({ status, className }: StatusBadgeProps): JSX.Element => {
+  const { t } = useTranslation()
+
   return (
     <span
       className={cn(
@@ -49,7 +52,7 @@ const StatusBadge = ({ status, className }: StatusBadgeProps): JSX.Element => {
         className,
       )}
     >
-      {getStatusLabel(status)}
+      {t(getStatusKey(status))}
     </span>
   )
 }

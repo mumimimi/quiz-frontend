@@ -1,4 +1,5 @@
 import { JSX } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useProfilePage } from './use-profile-page'
 import { cn } from 'src/utils/cn'
 
@@ -17,16 +18,17 @@ const ProfilePage = (): JSX.Element => {
     roles,
     selectedRoleId,
   } = useProfilePage()
+  const { t } = useTranslation()
 
   return (
     <div className="h-full overflow-y-auto p-6">
       <div className="max-w-2xl mx-auto flex flex-col gap-6">
-        <h1 className="text-white text-2xl font-semibold">Profile settings</h1>
+        <h1 className="text-white text-2xl font-semibold">{t('profile.title')}</h1>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <div className="bg-[#181818] border border-[#1d1d1d] rounded-2xl p-5 flex flex-col gap-4">
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-[#888]">First name</label>
+              <label className="text-xs text-[#888]">{t('profile.firstName')}</label>
               <input
                 {...register('firstName')}
                 type="text"
@@ -41,7 +43,7 @@ const ProfilePage = (): JSX.Element => {
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-[#888]">Last name</label>
+              <label className="text-xs text-[#888]">{t('profile.lastName')}</label>
               <input
                 {...register('lastName')}
                 type="text"
@@ -56,7 +58,7 @@ const ProfilePage = (): JSX.Element => {
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-[#888]">Role</label>
+              <label className="text-xs text-[#888]">{t('profile.role')}</label>
               <div className="flex flex-wrap gap-2">
                 {roles.map(r => (
                   <button
@@ -87,7 +89,7 @@ const ProfilePage = (): JSX.Element => {
               isDirty && 'cursor-pointer',
             )}
           >
-            {isSubmitting ? 'Saving…' : 'Save changes'}
+            {isSubmitting ? t('profile.saving') : t('profile.saveChanges')}
           </button>
         </form>
       </div>

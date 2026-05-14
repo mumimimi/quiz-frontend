@@ -1,4 +1,5 @@
 import "./index.css";
+import "./i18n";
 import { Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import { ToastContainer } from "react-toastify";

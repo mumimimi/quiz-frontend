@@ -1,5 +1,6 @@
 import { JSX, KeyboardEvent, useState } from 'react'
 import { IoArrowBack, IoCloseOutline } from 'react-icons/io5'
+import { useTranslation } from 'react-i18next'
 import type { TagsInputProps } from './types'
 import { useRoundFormPage } from './use-round-form-page'
 
@@ -8,6 +9,7 @@ const inputCls =
 
 const TagsInput = ({ tags, onChange, placeholder }: TagsInputProps): JSX.Element => {
   const [inputValue, setInputValue] = useState('')
+  const { t } = useTranslation()
 
   const addTag = () => {
     const val = inputValue.trim()
@@ -55,7 +57,7 @@ const TagsInput = ({ tags, onChange, placeholder }: TagsInputProps): JSX.Element
           value={inputValue}
           onChange={e => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder={placeholder ?? 'Type and press Enter…'}
+          placeholder={placeholder ?? t('roundForm.typeAndEnter')}
           className="bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-[#444] placeholder:text-[#555] flex-1"
         />
         <button
@@ -63,7 +65,7 @@ const TagsInput = ({ tags, onChange, placeholder }: TagsInputProps): JSX.Element
           onClick={addTag}
           className="text-xs border border-[#2a2a2a] px-3 py-2 rounded-lg text-[#888] hover:text-white hover:border-[#444] transition-colors cursor-pointer"
         >
-          Add
+          {t('roundForm.add')}
         </button>
       </div>
     </div>
@@ -86,11 +88,12 @@ const RoundFormPage = (): JSX.Element => {
     handleBack,
     onSubmit,
   } = useRoundFormPage()
+  const { t } = useTranslation()
 
   if (isEdit && isLoadingData) {
     return (
       <div className="flex h-full items-center justify-center">
-        <span className="text-[#555] text-sm">Loading…</span>
+        <span className="text-[#555] text-sm">{t('common.loading')}</span>
       </div>
     )
   }
@@ -103,39 +106,43 @@ const RoundFormPage = (): JSX.Element => {
           className="flex items-center gap-1.5 text-[#555] hover:text-white text-sm mb-6 transition-colors cursor-pointer"
         >
           <IoArrowBack size={16} />
-          Back
+          {t('common.back')}
         </button>
 
         <h1 className="text-white text-2xl font-semibold mb-6">
-          {isEdit ? 'Edit Round' : 'Create Round'}
+          {isEdit ? t('roundForm.editTitle') : t('roundForm.createTitle')}
         </h1>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <div className="bg-[#181818] border border-[#1d1d1d] rounded-2xl p-5 flex flex-col gap-4">
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-[#888]">Round name *</label>
-              <input {...register('name')} placeholder="Round 1" className={inputCls} />
+              <label className="text-xs text-[#888]">{t('roundForm.nameLabel')}</label>
+              <input
+                {...register('name')}
+                placeholder="Round 1"
+                className={inputCls}
+              />
               {errors.name && (
                 <span className="text-xs text-red-400">{errors.name.message}</span>
               )}
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-[#888]">Description</label>
+              <label className="text-xs text-[#888]">{t('roundForm.descriptionLabel')}</label>
               <textarea
                 {...register('description')}
                 rows={3}
-                placeholder="Round overview…"
+                placeholder={t('roundForm.roundOverview')}
                 className={`${inputCls} resize-none`}
               />
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-[#888]">Technology requirements</label>
+              <label className="text-xs text-[#888]">{t('roundForm.techReqLabel')}</label>
               <textarea
                 {...register('technologyRequirements')}
                 rows={3}
-                placeholder="Required technologies and stack…"
+                placeholder={t('roundForm.techRequirements')}
                 className={`${inputCls} resize-none`}
               />
             </div>
@@ -143,11 +150,11 @@ const RoundFormPage = (): JSX.Element => {
 
           <div className="bg-[#181818] border border-[#1d1d1d] rounded-2xl p-5 flex flex-col gap-4">
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-[#888]">Must-have criteria *</label>
+              <label className="text-xs text-[#888]">{t('roundForm.mustHaveCriteriaLabel')}</label>
               <TagsInput
                 tags={mustHaveCriteria}
                 onChange={setMustHaveCriteria}
-                placeholder="Add criterion and press Enter…"
+                placeholder={t('roundForm.criterionPlaceholder')}
               />
               {criteriaError && (
                 <span className="text-xs text-red-400">{criteriaError}</span>
@@ -155,28 +162,28 @@ const RoundFormPage = (): JSX.Element => {
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-[#888]">Reference links</label>
+              <label className="text-xs text-[#888]">{t('roundForm.referenceLinksLabel')}</label>
               <TagsInput
                 tags={referenceLinks}
                 onChange={setReferenceLinks}
-                placeholder="https://… and press Enter"
+                placeholder={t('roundForm.linkPlaceholder')}
               />
             </div>
           </div>
 
           <div className="bg-[#181818] border border-[#1d1d1d] rounded-2xl p-5 flex flex-col gap-4">
-            <h2 className="text-white text-sm font-medium">Timing</h2>
+            <h2 className="text-white text-sm font-medium">{t('roundForm.timing')}</h2>
 
             <div className="grid grid-cols-2 gap-3">
               <div className="flex flex-col gap-1">
-                <label className="text-xs text-[#888]">Start time *</label>
+                <label className="text-xs text-[#888]">{t('roundForm.startTimeLabel')}</label>
                 <input {...register('startTime')} type="datetime-local" className={inputCls} />
                 {errors.startTime && (
                   <span className="text-xs text-red-400">{errors.startTime.message}</span>
                 )}
               </div>
               <div className="flex flex-col gap-1">
-                <label className="text-xs text-[#888]">Submission deadline *</label>
+                <label className="text-xs text-[#888]">{t('roundForm.submissionDeadlineLabel')}</label>
                 <input
                   {...register('submissionDeadline')}
                   type="datetime-local"
@@ -196,7 +203,11 @@ const RoundFormPage = (): JSX.Element => {
             disabled={isSubmitting}
             className="bg-white text-black text-sm font-medium py-2.5 rounded-lg hover:bg-[#e0e0e0] transition-colors disabled:opacity-50 cursor-pointer"
           >
-            {isSubmitting ? 'Saving…' : isEdit ? 'Save Changes' : 'Create Round'}
+            {isSubmitting
+              ? t('roundForm.saving')
+              : isEdit
+                ? t('roundForm.saveChanges')
+                : t('roundForm.createButton')}
           </button>
         </form>
       </div>

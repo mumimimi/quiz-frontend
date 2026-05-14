@@ -1,5 +1,6 @@
 import { JSX } from 'react'
 import dayjs from 'dayjs'
+import { useTranslation } from 'react-i18next'
 import StatusBadge from 'src/components/status-badge'
 import {
   IoArrowBack,
@@ -31,11 +32,12 @@ const AdminRoundDetailPage = (): JSX.Element => {
     handleFinalizeRound,
     handleDelete,
   } = useAdminRoundDetailPage()
+  const { t } = useTranslation()
 
   if (isLoading) {
     return (
       <div className="flex h-full items-center justify-center">
-        <span className="text-[#555] text-sm">Loading…</span>
+        <span className="text-[#555] text-sm">{t('common.loading')}</span>
       </div>
     )
   }
@@ -43,7 +45,7 @@ const AdminRoundDetailPage = (): JSX.Element => {
   if (isError || !round) {
     return (
       <div className="flex h-full items-center justify-center">
-        <span className="text-red-400 text-sm">Round not found</span>
+        <span className="text-red-400 text-sm">{t('admin.roundDetail.roundNotFound')}</span>
       </div>
     )
   }
@@ -57,7 +59,7 @@ const AdminRoundDetailPage = (): JSX.Element => {
             className="flex items-center gap-1.5 text-[#555] hover:text-white text-sm mb-4 transition-colors cursor-pointer"
           >
             <IoArrowBack size={16} />
-            {round.tournament ? round.tournament.name : 'Tournaments'}
+            {round.tournament ? round.tournament.name : t('tournaments.title')}
           </button>
 
           <div className="flex items-start justify-between gap-4">
@@ -73,7 +75,7 @@ const AdminRoundDetailPage = (): JSX.Element => {
                 className="flex items-center gap-1.5 text-xs text-[#888] border border-[#2a2a2a] px-3 py-1.5 rounded-lg hover:text-red-400 hover:border-red-400 transition-colors cursor-pointer"
               >
                 <IoTrashOutline size={14} />
-                Delete
+                {t('common.delete')}
               </button>
 
               <button
@@ -81,7 +83,7 @@ const AdminRoundDetailPage = (): JSX.Element => {
                 className="flex items-center gap-1.5 text-xs text-[#888] border border-[#2a2a2a] px-3 py-1.5 rounded-lg hover:text-white hover:border-[#444] transition-colors cursor-pointer"
               >
                 <IoPencilOutline size={14} />
-                Edit
+                {t('common.edit')}
               </button>
 
               {nextStatus && statusLabel && (
@@ -99,7 +101,7 @@ const AdminRoundDetailPage = (): JSX.Element => {
                   className="flex items-center gap-1.5 text-xs text-white bg-blue-700 hover:bg-blue-600 px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
                 >
                   <IoAddCircleOutline size={14} />
-                  Create Next Round
+                  {t('admin.roundDetail.createNextRound')}
                 </button>
               )}
 
@@ -109,14 +111,14 @@ const AdminRoundDetailPage = (): JSX.Element => {
                     onClick={handleAssignJury}
                     className="text-xs border border-[#2a2a2a] text-[#888] px-4 py-1.5 rounded-lg hover:text-white hover:border-[#444] transition-colors cursor-pointer"
                   >
-                    Assign Jury
+                    {t('admin.roundDetail.assignJury')}
                   </button>
 
                   <button
                     onClick={handleFinalizeRound}
                     className="text-xs border border-orange-900/50 text-orange-400 px-4 py-1.5 rounded-lg hover:bg-orange-900/20 transition-colors cursor-pointer"
                   >
-                    Finalize Round
+                    {t('admin.roundDetail.finalizeRound')}
                   </button>
                 </>
               )}
@@ -134,7 +136,7 @@ const AdminRoundDetailPage = (): JSX.Element => {
           {round.description && (
             <div>
               <span className="text-xs text-[#555] uppercase tracking-wider">
-                Description
+                {t('admin.roundDetail.description')}
               </span>
               <p className="text-[#ccc] text-sm mt-1 whitespace-pre-wrap">
                 {round.description}
@@ -145,7 +147,7 @@ const AdminRoundDetailPage = (): JSX.Element => {
           {round.technologyRequirements && (
             <div>
               <span className="text-xs text-[#555] uppercase tracking-wider">
-                Technology Requirements
+                {t('admin.roundDetail.technologyRequirements')}
               </span>
               <p className="text-[#ccc] text-sm mt-1 whitespace-pre-wrap">
                 {round.technologyRequirements}
@@ -156,7 +158,7 @@ const AdminRoundDetailPage = (): JSX.Element => {
           {round.mustHaveCriteria.length > 0 && (
             <div>
               <span className="text-xs text-[#555] uppercase tracking-wider">
-                Must-have criteria
+                {t('admin.roundDetail.mustHaveCriteria')}
               </span>
               <ul className="mt-2 flex flex-col gap-1">
                 {round.mustHaveCriteria.map((c, i) => (
@@ -172,7 +174,7 @@ const AdminRoundDetailPage = (): JSX.Element => {
           {round.referenceLinks && round.referenceLinks.length > 0 && (
             <div>
               <span className="text-xs text-[#555] uppercase tracking-wider">
-                Reference links
+                {t('admin.roundDetail.referenceLinks')}
               </span>
               <ul className="mt-2 flex flex-col gap-1.5">
                 {round.referenceLinks.map((link, i) => (
@@ -194,7 +196,7 @@ const AdminRoundDetailPage = (): JSX.Element => {
 
           <div className="grid grid-cols-2 gap-4 pt-2 border-t border-[#1d1d1d]">
             <div>
-              <span className="text-xs text-[#555]">Start time</span>
+              <span className="text-xs text-[#555]">{t('admin.roundDetail.startTime')}</span>
 
               <p className="text-[#aaa] text-sm mt-0.5">
                 {dayjs(round.startTime).format('DD MMM YYYY, HH:mm')}
@@ -202,7 +204,7 @@ const AdminRoundDetailPage = (): JSX.Element => {
             </div>
 
             <div>
-              <span className="text-xs text-[#555]">Submission deadline</span>
+              <span className="text-xs text-[#555]">{t('admin.roundDetail.submissionDeadline')}</span>
 
               <p className="text-[#aaa] text-sm mt-0.5">
                 {dayjs(round.submissionDeadline).format('DD MMM YYYY, HH:mm')}
@@ -213,14 +215,14 @@ const AdminRoundDetailPage = (): JSX.Element => {
 
         <div>
           <h2 className="text-white font-medium mb-3">
-            Submissions{' '}
+            {t('admin.roundDetail.submissions')}{' '}
             <span className="text-[#555] font-normal text-sm">
               ({submissions.length})
             </span>
           </h2>
 
           {submissions.length === 0 ? (
-            <p className="text-[#555] text-sm">No submissions yet.</p>
+            <p className="text-[#555] text-sm">{t('admin.roundDetail.noSubmissionsYet')}</p>
           ) : (
             <div className="flex flex-col gap-2">
               {submissions.map(s => (
@@ -235,14 +237,15 @@ const AdminRoundDetailPage = (): JSX.Element => {
                     </span>
 
                     <p className="text-[#555] text-xs mt-0.5">
-                      Submitted {dayjs(s.submittedAt).format('DD MMM YYYY, HH:mm')}
+                      {t('admin.roundDetail.submitted')}{' '}
+                      {dayjs(s.submittedAt).format('DD MMM YYYY, HH:mm')}
                     </p>
                   </div>
 
                   {s.isLocked && (
                     <div className="flex items-center gap-1.5 text-orange-400 text-xs shrink-0">
                       <IoLockClosedOutline size={12} />
-                      Locked
+                      {t('admin.roundDetail.locked')}
                     </div>
                   )}
                 </div>

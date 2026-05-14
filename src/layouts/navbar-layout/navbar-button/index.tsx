@@ -1,24 +1,20 @@
 import { JSX } from 'react'
+import { useTranslation } from 'react-i18next'
 import { NavbarButtonProps } from './types'
 import { cn } from 'src/utils/cn'
 import { RoutesEnum } from 'src/routes/routes'
 import { IoHomeOutline, IoShieldOutline, IoPersonOutline } from 'react-icons/io5'
 
-const navbarButtonConfig: Partial<
-  Record<RoutesEnum, { text: string; leftIcon?: JSX.Element }>
-> = {
-  [RoutesEnum.TOURNAMENTS]: {
-    text: 'Tournaments',
-    leftIcon: <IoHomeOutline size={20} />,
-  },
-  [RoutesEnum.ADMIN]: {
-    text: 'Admin',
-    leftIcon: <IoShieldOutline size={20} />,
-  },
-  [RoutesEnum.JURY]: {
-    text: 'Jury',
-    leftIcon: <IoPersonOutline size={20} />,
-  },
+const navbarButtonIcons: Partial<Record<RoutesEnum, JSX.Element>> = {
+  [RoutesEnum.TOURNAMENTS]: <IoHomeOutline size={20} />,
+  [RoutesEnum.ADMIN]: <IoShieldOutline size={20} />,
+  [RoutesEnum.JURY]: <IoPersonOutline size={20} />,
+}
+
+const navbarButtonKeys: Partial<Record<RoutesEnum, string>> = {
+  [RoutesEnum.TOURNAMENTS]: 'nav.tournaments',
+  [RoutesEnum.ADMIN]: 'nav.admin',
+  [RoutesEnum.JURY]: 'nav.jury',
 }
 
 const NavbarButton = ({
@@ -27,7 +23,11 @@ const NavbarButton = ({
   isSelected,
   ...props
 }: NavbarButtonProps): JSX.Element => {
-  const params = navbarButtonConfig[navbarButtonType] ?? { text: navbarButtonType }
+  const { t } = useTranslation()
+
+  const icon = navbarButtonIcons[navbarButtonType]
+  const textKey = navbarButtonKeys[navbarButtonType]
+  const text = textKey ? t(textKey) : navbarButtonType
 
   return (
     <button
@@ -41,8 +41,8 @@ const NavbarButton = ({
       {...props}
       type="button"
     >
-      {params.leftIcon}
-      <span className="text-sm">{params.text}</span>
+      {icon}
+      <span className="text-sm">{text}</span>
     </button>
   )
 }

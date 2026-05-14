@@ -1,5 +1,6 @@
 import { JSX } from 'react'
 import { IoArrowBack } from 'react-icons/io5'
+import { useTranslation } from 'react-i18next'
 import { useTournamentFormPage } from './use-tournament-form-page'
 
 const inputCls =
@@ -16,11 +17,12 @@ const TournamentFormPage = (): JSX.Element => {
     handleBack,
     onSubmit,
   } = useTournamentFormPage()
+  const { t } = useTranslation()
 
   if (isEdit && isLoadingData) {
     return (
       <div className="flex h-full items-center justify-center">
-        <span className="text-[#555] text-sm">Loading…</span>
+        <span className="text-[#555] text-sm">{t('common.loading')}</span>
       </div>
     )
   }
@@ -33,17 +35,17 @@ const TournamentFormPage = (): JSX.Element => {
           className="flex items-center gap-1.5 text-[#555] hover:text-white text-sm mb-6 transition-colors cursor-pointer"
         >
           <IoArrowBack size={16} />
-          Back
+          {t('common.back')}
         </button>
 
         <h1 className="text-white text-2xl font-semibold mb-6">
-          {isEdit ? 'Edit Tournament' : 'Create Tournament'}
+          {isEdit ? t('tournamentForm.editTitle') : t('tournamentForm.createTitle')}
         </h1>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <div className="bg-[#181818] border border-[#1d1d1d] rounded-2xl p-5 flex flex-col gap-4">
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-[#888]">Tournament name *</label>
+              <label className="text-xs text-[#888]">{t('tournamentForm.nameLabel')}</label>
               <input
                 {...register('name')}
                 placeholder="Cyber Quiz 2025"
@@ -55,43 +57,43 @@ const TournamentFormPage = (): JSX.Element => {
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-[#888]">Description</label>
+              <label className="text-xs text-[#888]">{t('tournamentForm.descriptionLabel')}</label>
               <textarea
                 {...register('description')}
                 rows={3}
-                placeholder="Brief overview of the tournament…"
+                placeholder={t('tournamentForm.descriptionPlaceholder')}
                 className={`${inputCls} resize-none`}
               />
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-[#888]">Rules</label>
+              <label className="text-xs text-[#888]">{t('tournamentForm.rulesLabel')}</label>
               <textarea
                 {...register('rules')}
                 rows={5}
-                placeholder="Tournament rules and regulations…"
+                placeholder={t('tournamentForm.rulesPlaceholder')}
                 className={`${inputCls} resize-none`}
               />
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-[#888]">Max team capacity</label>
+              <label className="text-xs text-[#888]">{t('tournamentForm.maxCapacityLabel')}</label>
               <input
                 {...register('maxTeamCapacity')}
                 type="number"
                 min={1}
-                placeholder="No limit"
+                placeholder={t('tournamentForm.noLimit')}
                 className={inputCls}
               />
             </div>
           </div>
 
           <div className="bg-[#181818] border border-[#1d1d1d] rounded-2xl p-5 flex flex-col gap-4">
-            <h2 className="text-white text-sm font-medium">Dates</h2>
+            <h2 className="text-white text-sm font-medium">{t('tournamentForm.datesSection')}</h2>
 
             <div className="grid grid-cols-2 gap-3">
               <div className="flex flex-col gap-1">
-                <label className="text-xs text-[#888]">Registration start *</label>
+                <label className="text-xs text-[#888]">{t('tournamentForm.registrationStart')}</label>
                 <input {...register('registrationStartDate')} type="date" className={inputCls} />
                 {errors.registrationStartDate && (
                   <span className="text-xs text-red-400">
@@ -100,7 +102,7 @@ const TournamentFormPage = (): JSX.Element => {
                 )}
               </div>
               <div className="flex flex-col gap-1">
-                <label className="text-xs text-[#888]">Registration end *</label>
+                <label className="text-xs text-[#888]">{t('tournamentForm.registrationEnd')}</label>
                 <input {...register('registrationEndDate')} type="date" className={inputCls} />
                 {errors.registrationEndDate && (
                   <span className="text-xs text-red-400">
@@ -111,7 +113,7 @@ const TournamentFormPage = (): JSX.Element => {
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-[#888]">Start date *</label>
+              <label className="text-xs text-[#888]">{t('tournamentForm.startDateLabel')}</label>
               <input {...register('startDate')} type="date" className={inputCls} />
               {errors.startDate && (
                 <span className="text-xs text-red-400">{errors.startDate.message}</span>
@@ -124,7 +126,11 @@ const TournamentFormPage = (): JSX.Element => {
             disabled={isSubmitting}
             className="bg-white text-black text-sm font-medium py-2.5 rounded-lg hover:bg-[#e0e0e0] transition-colors disabled:opacity-50 cursor-pointer"
           >
-            {isSubmitting ? 'Saving…' : isEdit ? 'Save Changes' : 'Create Tournament'}
+            {isSubmitting
+              ? t('tournamentForm.saving')
+              : isEdit
+                ? t('tournamentForm.saveChanges')
+                : t('tournamentForm.createButton')}
           </button>
         </form>
       </div>

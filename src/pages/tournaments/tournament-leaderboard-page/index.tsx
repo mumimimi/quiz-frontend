@@ -1,17 +1,9 @@
 import { JSX } from 'react'
+import { useTranslation } from 'react-i18next'
 import ScoreBar from 'src/components/score-bar'
 import { LeaderboardEntryT } from 'src/services/leaderboard/types'
 import { IoArrowBack } from 'react-icons/io5'
 import { useTournamentLeaderboardPage } from './use-tournament-leaderboard-page'
-
-const SCORE_COLS: { key: keyof LeaderboardEntryT; label: string }[] = [
-  { key: 'backendQuality', label: 'Backend' },
-  { key: 'databaseStructure', label: 'Database' },
-  { key: 'frontendQuality', label: 'Frontend' },
-  { key: 'requirementsCompletion', label: 'Requirements' },
-  { key: 'functionality', label: 'Functionality' },
-  { key: 'usability', label: 'Usability' },
-]
 
 const RankBadge = ({ rank }: { rank: number }): JSX.Element => {
   if (rank === 1) return <span className="text-xl">🥇</span>
@@ -22,11 +14,12 @@ const RankBadge = ({ rank }: { rank: number }): JSX.Element => {
 
 const TournamentLeaderboardPage = (): JSX.Element => {
   const { entries, isLoading, isError, handleBack } = useTournamentLeaderboardPage()
+  const { t } = useTranslation()
 
   if (isLoading) {
     return (
       <div className="flex h-full items-center justify-center">
-        <span className="text-[#555] text-sm">Loading…</span>
+        <span className="text-[#555] text-sm">{t('common.loading')}</span>
       </div>
     )
   }
@@ -34,7 +27,7 @@ const TournamentLeaderboardPage = (): JSX.Element => {
   if (isError) {
     return (
       <div className="flex h-full items-center justify-center">
-        <span className="text-red-400 text-sm">Failed to load leaderboard</span>
+        <span className="text-red-400 text-sm">{t('leaderboard.noResultsYet')}</span>
       </div>
     )
   }
@@ -48,17 +41,17 @@ const TournamentLeaderboardPage = (): JSX.Element => {
             className="flex items-center gap-1.5 text-[#555] hover:text-white text-sm mb-4 transition-colors cursor-pointer"
           >
             <IoArrowBack size={16} />
-            Tournament
+            {t('leaderboard.tournamentBack')}
           </button>
-          <h1 className="text-white text-2xl font-semibold">Leaderboard</h1>
+          <h1 className="text-white text-2xl font-semibold">{t('leaderboard.tournamentTitle')}</h1>
           <p className="text-[#555] text-sm mt-0.5">
-            {entries.length} team{entries.length !== 1 ? 's' : ''} ranked
+            {t('leaderboard.teamsRanked', { count: entries.length })}
           </p>
         </div>
 
         {entries.length === 0 ? (
           <div className="bg-[#181818] border border-[#1d1d1d] rounded-2xl p-8 text-center">
-            <p className="text-[#555] text-sm">No results yet.</p>
+            <p className="text-[#555] text-sm">{t('leaderboard.noResultsYet')}</p>
           </div>
         ) : (
           <div className="flex flex-col gap-3">
@@ -72,54 +65,67 @@ const TournamentLeaderboardPage = (): JSX.Element => {
   )
 }
 
-const EntryCard = ({ entry }: { entry: LeaderboardEntryT }): JSX.Element => (
-  <div className="bg-[#181818] border border-[#1d1d1d] rounded-2xl p-5 flex flex-col gap-4">
-    <div className="flex items-center gap-4">
-      <div className="flex items-center justify-center w-8 shrink-0">
-        <RankBadge rank={entry.rank} />
-      </div>
-      <div className="flex-1 min-w-0">
-        <span className="text-white font-medium truncate block">{entry.team.name}</span>
-        <span className="text-[#555] text-xs">
-          {[
-            entry.team.city,
-            entry.team.school,
-            `${entry.evaluationCount} evaluation${entry.evaluationCount !== 1 ? 's' : ''}`,
-          ]
-            .filter(Boolean)
-            .join(' · ')}
-        </span>
-      </div>
-      <div className="text-right shrink-0">
-        <span
-          className={`text-2xl font-bold ${
-            entry.totalScore > 70
-              ? 'text-green-400'
-              : entry.totalScore > 40
-                ? 'text-yellow-400'
-                : 'text-red-400'
-          }`}
-        >
-          {entry.totalScore.toFixed(1)}
-        </span>
-        <p className="text-[#555] text-xs">avg score</p>
-      </div>
-    </div>
+const EntryCard = ({ entry }: { entry: LeaderboardEntryT }): JSX.Element => {
+  const { t } = useTranslation()
 
-    <ScoreBar value={entry.totalScore} />
+  const SCORE_COLS: { key: keyof LeaderboardEntryT; labelKey: string }[] = [
+    { key: 'backendQuality', labelKey: 'leaderboard.backend' },
+    { key: 'databaseStructure', labelKey: 'leaderboard.database' },
+    { key: 'frontendQuality', labelKey: 'leaderboard.frontend' },
+    { key: 'requirementsCompletion', labelKey: 'leaderboard.requirements' },
+    { key: 'functionality', labelKey: 'leaderboard.functionality' },
+    { key: 'usability', labelKey: 'leaderboard.usability' },
+  ]
 
-    <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-2 pt-1 border-t border-[#1d1d1d]">
-      {SCORE_COLS.map(({ key, label }) => (
-        <div key={key} className="flex flex-col gap-1">
-          <div className="flex items-center justify-between">
-            <span className="text-[#555] text-xs">{label}</span>
-            <span className="text-[#aaa] text-xs">{(entry[key] as number).toFixed(1)}</span>
-          </div>
-          <ScoreBar value={entry[key] as number} />
+  return (
+    <div className="bg-[#181818] border border-[#1d1d1d] rounded-2xl p-5 flex flex-col gap-4">
+      <div className="flex items-center gap-4">
+        <div className="flex items-center justify-center w-8 shrink-0">
+          <RankBadge rank={entry.rank} />
         </div>
-      ))}
+        <div className="flex-1 min-w-0">
+          <span className="text-white font-medium truncate block">{entry.team.name}</span>
+          <span className="text-[#555] text-xs">
+            {[
+              entry.team.city,
+              entry.team.school,
+              t('leaderboard.evaluations', { count: entry.evaluationCount }),
+            ]
+              .filter(Boolean)
+              .join(' · ')}
+          </span>
+        </div>
+        <div className="text-right shrink-0">
+          <span
+            className={`text-2xl font-bold ${
+              entry.totalScore > 70
+                ? 'text-green-400'
+                : entry.totalScore > 40
+                  ? 'text-yellow-400'
+                  : 'text-red-400'
+            }`}
+          >
+            {entry.totalScore.toFixed(1)}
+          </span>
+          <p className="text-[#555] text-xs">{t('leaderboard.avgScore')}</p>
+        </div>
+      </div>
+
+      <ScoreBar value={entry.totalScore} />
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-2 pt-1 border-t border-[#1d1d1d]">
+        {SCORE_COLS.map(({ key, labelKey }) => (
+          <div key={key} className="flex flex-col gap-1">
+            <div className="flex items-center justify-between">
+              <span className="text-[#555] text-xs">{t(labelKey)}</span>
+              <span className="text-[#aaa] text-xs">{(entry[key] as number).toFixed(1)}</span>
+            </div>
+            <ScoreBar value={entry[key] as number} />
+          </div>
+        ))}
+      </div>
     </div>
-  </div>
-)
+  )
+}
 
 export default TournamentLeaderboardPage
