@@ -1,0 +1,51 @@
+@import "tailwindcss";
+@import "./fonts/font-outfit.css";
+@import "react-toastify/dist/ReactToastify.css";
+
+@layer base {
+  html {
+    font-family: "Outfit", system-ui, sans-serif;
+    font-weight: 400;
+    color: #b5b5b5;
+  }
+
+  body {
+    @apply m-0 p-0 bg-[#111111];
+  }
+
+  img {
+    @apply inline-block;
+  }
+}
+
+/* ── react-toastify dark theme ───────────────────────────────────────────── */
+:root {
+  --toastify-color-dark: #181818;
+  --toastify-text-color-dark: #ccc;
+  --toastify-toast-bd-radius: 1rem;
+  --toastify-toast-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --toastify-font-family: "Outfit", system-ui, sans-serif;
+  --toastify-color-error: #f87171;
+  --toastify-color-success: #4ade80;
+  --toastify-color-warning: #facc15;
+  --toastify-color-info: #60a5fa;
+  --toastify-color-progress-dark: #555;
+  --toastify-color-progress-error: #f87171;
+  --toastify-color-progress-success: #4ade80;
+  --toastify-color-progress-warning: #facc15;
+  --toastify-color-progress-info: #60a5fa;
+}
+
+.Toastify__toast {
+  border: 1px solid #1d1d1d;
+}
+
+.Toastify__close-button--dark {
+  color: #555;
+  opacity: 1;
+}
+
+.Toastify__close-button--dark:hover {
+  color: #ccc;
+}
+

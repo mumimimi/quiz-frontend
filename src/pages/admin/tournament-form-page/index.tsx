@@ -1,0 +1,135 @@
+import { JSX } from 'react'
+import { IoArrowBack } from 'react-icons/io5'
+import { useTournamentFormPage } from './use-tournament-form-page'
+
+const inputCls =
+  'bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-[#444] placeholder:text-[#555] w-full [color-scheme:dark]'
+
+const TournamentFormPage = (): JSX.Element => {
+  const {
+    isEdit,
+    isLoadingData,
+    register,
+    handleSubmit,
+    errors,
+    isSubmitting,
+    handleBack,
+    onSubmit,
+  } = useTournamentFormPage()
+
+  if (isEdit && isLoadingData) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <span className="text-[#555] text-sm">Loading…</span>
+      </div>
+    )
+  }
+
+  return (
+    <div className="h-full overflow-y-auto p-6">
+      <div className="max-w-2xl mx-auto">
+        <button
+          onClick={handleBack}
+          className="flex items-center gap-1.5 text-[#555] hover:text-white text-sm mb-6 transition-colors cursor-pointer"
+        >
+          <IoArrowBack size={16} />
+          Back
+        </button>
+
+        <h1 className="text-white text-2xl font-semibold mb-6">
+          {isEdit ? 'Edit Tournament' : 'Create Tournament'}
+        </h1>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+          <div className="bg-[#181818] border border-[#1d1d1d] rounded-2xl p-5 flex flex-col gap-4">
+            <div className="flex flex-col gap-1">
+              <label className="text-xs text-[#888]">Tournament name *</label>
+              <input
+                {...register('name')}
+                placeholder="Cyber Quiz 2025"
+                className={inputCls}
+              />
+              {errors.name && (
+                <span className="text-xs text-red-400">{errors.name.message}</span>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="text-xs text-[#888]">Description</label>
+              <textarea
+                {...register('description')}
+                rows={3}
+                placeholder="Brief overview of the tournament…"
+                className={`${inputCls} resize-none`}
+              />
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="text-xs text-[#888]">Rules</label>
+              <textarea
+                {...register('rules')}
+                rows={5}
+                placeholder="Tournament rules and regulations…"
+                className={`${inputCls} resize-none`}
+              />
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="text-xs text-[#888]">Max team capacity</label>
+              <input
+                {...register('maxTeamCapacity')}
+                type="number"
+                min={1}
+                placeholder="No limit"
+                className={inputCls}
+              />
+            </div>
+          </div>
+
+          <div className="bg-[#181818] border border-[#1d1d1d] rounded-2xl p-5 flex flex-col gap-4">
+            <h2 className="text-white text-sm font-medium">Dates</h2>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-[#888]">Registration start *</label>
+                <input {...register('registrationStartDate')} type="date" className={inputCls} />
+                {errors.registrationStartDate && (
+                  <span className="text-xs text-red-400">
+                    {errors.registrationStartDate.message}
+                  </span>
+                )}
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-[#888]">Registration end *</label>
+                <input {...register('registrationEndDate')} type="date" className={inputCls} />
+                {errors.registrationEndDate && (
+                  <span className="text-xs text-red-400">
+                    {errors.registrationEndDate.message}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="text-xs text-[#888]">Start date *</label>
+              <input {...register('startDate')} type="date" className={inputCls} />
+              {errors.startDate && (
+                <span className="text-xs text-red-400">{errors.startDate.message}</span>
+              )}
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="bg-white text-black text-sm font-medium py-2.5 rounded-lg hover:bg-[#e0e0e0] transition-colors disabled:opacity-50 cursor-pointer"
+          >
+            {isSubmitting ? 'Saving…' : isEdit ? 'Save Changes' : 'Create Tournament'}
+          </button>
+        </form>
+      </div>
+    </div>
+  )
+}
+
+export default TournamentFormPage
