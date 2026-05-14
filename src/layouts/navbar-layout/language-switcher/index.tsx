@@ -1,10 +1,12 @@
 import { JSX, useState, useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IoChevronDownOutline } from 'react-icons/io5'
+import GB from 'country-flag-icons/react/3x2/GB'
+import UA from 'country-flag-icons/react/3x2/UA'
 
 const LANGUAGES = [
-  { code: 'en', label: 'EN', fullLabel: 'English', flag: '🇬🇧' },
-  { code: 'uk', label: 'UA', fullLabel: 'Українська', flag: '🇺🇦' },
+  { code: 'en', label: 'EN', fullLabel: 'English', Flag: GB },
+  { code: 'uk', label: 'UA', fullLabel: 'Українська', Flag: UA },
 ]
 
 const LanguageSwitcher = (): JSX.Element => {
@@ -36,7 +38,7 @@ const LanguageSwitcher = (): JSX.Element => {
         onClick={() => setIsOpen(o => !o)}
         className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs text-[#888] hover:text-white border border-[#2a2a2a] rounded-lg transition-colors cursor-pointer"
       >
-        <span>{current.flag}</span>
+        <current.Flag className="w-4 h-auto rounded-sm" />
         <span>{current.label}</span>
         <IoChevronDownOutline
           size={12}
@@ -56,7 +58,7 @@ const LanguageSwitcher = (): JSX.Element => {
                   : 'text-[#888] hover:text-white hover:bg-[#232323]'
               }`}
             >
-              <span className="text-base leading-none">{lang.flag}</span>
+              <lang.Flag className="w-4 h-auto rounded-sm" />
               <span className="font-medium">{lang.label}</span>
               <span className="text-[#555]">{lang.fullLabel}</span>
             </button>
